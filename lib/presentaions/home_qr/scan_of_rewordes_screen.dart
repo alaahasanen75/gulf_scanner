@@ -82,7 +82,7 @@ class _RewordsScreenState extends State<RewordsScreen> {
                 height: 100.h,
               ),
               Text(
-                'ادخل البريد الالكتروني',
+               'ادخل رقم الهاتف',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 15.sp,
@@ -96,10 +96,10 @@ class _RewordsScreenState extends State<RewordsScreen> {
                 readOnly: false,
                 maxLines: 1,
                 minLines: 1,
-                textInputType: TextInputType.emailAddress,
+                textInputType: TextInputType.phone,
                 obscureText: false,
                 controller: emailController,
-                hintText: 'البريد الالكتروني',
+                hintText: '966+',
                 validator: () {},
               ),
               SizedBox(
@@ -135,14 +135,14 @@ class _RewordsScreenState extends State<RewordsScreen> {
                       scanToGetRewards(sendData: {
                         'code': widget.id,
                         'password': passowrdController.text,
-                        'email': emailController.text,
+                        'phone': '966${emailController.text}',
                       });
 
                       loading = true;
                     });
                   } else {
                     ShowToast(
-                        msg: 'ادخل البريد الالكتروني وكلمه السر',
+                        msg: 'ادخل رقم الهاتف وكلمه السر',
                         states: ToastStates.ERROR);
                   }
                 },
@@ -193,8 +193,8 @@ class _RewordsScreenState extends State<RewordsScreen> {
               ? 'تمت العمليه بنجاح'
               : value.data['message']["code"] != null
                   ? "The selected code is invalid."
-                  : value.data['message']["email"] != null
-                      ? "The selected email is invalid."
+                  : value.data['message']["phone"] != null
+                      ? "The selected phone is invalid."
                       : value.data['message']["password"] != null
                           ? "The password field is required."
                           : '',

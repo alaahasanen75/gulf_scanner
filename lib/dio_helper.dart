@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DioHelper {
   static late Dio dio;
 
-  static void init() {
+  static void init() async {
     dio = Dio(
       BaseOptions(
         baseUrl: 'https://admin.gulfsaudi.com/public/api/v1/',
@@ -106,7 +107,33 @@ class DioHelper {
   // }
 }
 
+class CasheHelper {
+  static late SharedPreferences sharedPreferences;
 
+  static Future<void> init() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  static Future<bool> saveData({
+    required String key,
+    required dynamic value,
+  }) async {
+    if (value is String) return await sharedPreferences.setString(key, value);
+    if (value is int) return await sharedPreferences.setInt(key, value);
+    if (value is bool) return await sharedPreferences.setBool(key, value);
+    return await sharedPreferences.setDouble(key, value);
+  }
+
+  static String? getToken() {
+    String? token = sharedPreferences.getString('token');
+    if (token == null) {
+      print('No Data Saved');
+    } else {
+      print('$token');
+    }
+    return token;
+  }
+}
 
 class TextFormFiled extends StatelessWidget {
   TextFormFiled(
@@ -143,48 +170,46 @@ class TextFormFiled extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(maxLength:maxLength ,
+    return TextFormField(
+      maxLength: maxLength,
       onFieldSubmitted: onFieldSubmitted,
       onChanged: onChanged,
       readOnly: readOnly ?? false,
       cursorHeight: 15.sp,
       controller: controller,
       obscureText: obscureText!,
-      cursorColor:  Color.fromRGBO(255, 99, 25, 1),
+      cursorColor: Color.fromRGBO(255, 99, 25, 1),
       keyboardType: textInputType,
       validator: (value) => validator(value),
       maxLines: maxLines,
       minLines: minLines,
-      style: const TextStyle(color: Colors.black),
+      style: TextStyle(color: Colors.black),
       decoration: InputDecoration(
         fillColor: Colors.white,
-        // contentPadding: contentPadding ??
-        //     EdgeInsets.symmetric(horizontal: 0.h, vertical: 0.h),
+        contentPadding: EdgeInsets.symmetric(horizontal: 5.h, vertical: 10.h),
         filled: true,
-        suffixIcon: suffixIcon ?? null,
-        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
         hintText: hintText,
         hintStyle: TextStyle(
           color: Colors.black45,
-          fontFamily: 'Almarai',
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w400,
+          fontSize: 15.sp,
+          fontWeight: FontWeight.w500,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.sp),
-          borderSide: BorderSide(color: Color.fromRGBO(231, 231, 230, 1), width: 1.sp),
+          borderRadius: BorderRadius.circular(10.sp),
+          borderSide: const BorderSide(color: Colors.grey),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.sp),
-          borderSide: BorderSide(color: Color.fromRGBO(231, 231, 230, 1), width: 1.sp),
+          borderRadius: BorderRadius.circular(10.sp),
+          borderSide: const BorderSide(color: Color.fromRGBO(255, 99, 25, 1)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.sp),
-          borderSide: BorderSide(color: Color.fromRGBO(255, 99, 25, 1), width: 1.sp),
+          borderRadius: BorderRadius.circular(10.sp),
+          borderSide: const BorderSide(color: Color.fromRGBO(255, 99, 25, 1)),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.sp),
-          borderSide: BorderSide(color: Color.fromRGBO(231, 231, 230, 1), width: 1.sp),
+          borderRadius: BorderRadius.circular(10.sp),
+          borderSide: const BorderSide(color: Colors.white),
         ),
       ),
     );
