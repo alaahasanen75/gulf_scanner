@@ -186,8 +186,10 @@ class _PointsScreenState extends State<LoginScreen> {
   }) async {
     var data =
         FormData.fromMap({'email': email, 'password': password, 'type': '1'});
-    setState(() async {
-      loading = true;
+       setState(() {
+         loading = true;
+      });
+     
       var dio = Dio();
       var response = await dio.request(
         'https://admin.gulfsaudi.com/public/api/v1/guest/login',
@@ -201,7 +203,7 @@ class _PointsScreenState extends State<LoginScreen> {
       setState(() {
           loading = false;
       });
-    CasheHelper.saveData(key: 'token', value: response.data[ "token"]);
+    CasheHelper.saveData(key: 'token', value: response.data["token"]);
       CasheHelper.getToken();
         AwesomeDialog(
           dismissOnTouchOutside: false,
@@ -238,7 +240,7 @@ class _PointsScreenState extends State<LoginScreen> {
           loading = false;
       });
       }
-    });
+   
   }
 
   void changePsswordVisibility() {
